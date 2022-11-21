@@ -3,6 +3,7 @@ import logging
 
 
 def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None:
+    logging.info(f"Creating {browser} webdriver...")
     if browser != "chrome" and browser != "firefox":
         if (browser == ""):
             logging.error(f"Browser type 'browser' seems to be unset. Set it in ./data/prefs.py")

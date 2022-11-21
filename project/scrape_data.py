@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.remote.webelement import WebElement
-from data.creds import net_id, password, COURSE_BOX, COURSE_MSG, COURSE_BTN, SIGN_UP_URL, HOME_URL
+from data.creds import net_id, password
+from constants import COURSE_BOX, COURSE_BTN, SIGN_UP_URL, HOME_URL
 import logging
 
 
@@ -43,6 +43,7 @@ class Scraper:
         d: Chrome | Firefox = self.driver
         d.get("https://my.tudelft.nl/#/inschrijven/cursus/:id")
         self._wait_for_element_by(By.XPATH, '//*[@id="submit_button"]')
+        logging.info("Attempting login...")
 
         d.find_element(By.XPATH, '//*[@id="username"]').send_keys(net_id)
         d.find_element(By.XPATH, '//*[@id="password"]').send_keys(password)
@@ -65,7 +66,7 @@ class Scraper:
                     break
                     # TODO: Implement if course is available
             self._refresh_course_page()
-        logging.info("Completed scrape")
+        logging.info("Completed scrape!")
 
     def _wait_for_element_by(self, by: By, name: str, timeout=30) -> None:
         try:
