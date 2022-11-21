@@ -1,0 +1,1 @@
+browser: str = "chrome"     # Put desired browser ('chrome' or 'firefox') here
