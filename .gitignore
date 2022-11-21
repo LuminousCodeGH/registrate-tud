@@ -1,3 +1,8 @@
+# Custom specified
+.idea
+project/chromedriver.exe
+project/geckodriver.exe
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
