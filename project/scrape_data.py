@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from data.creds import net_id, password, COURSE_URL, COURSE_SEARCH
 import logging
 
+
 class Scraper:
     def __init__(self, driver: Chrome | Firefox, courses: dict[bool]):
         self.courses: dict[bool] = courses
@@ -47,12 +48,12 @@ class Scraper:
 
         self._wait_for_element_by(By.XPATH, COURSE_SEARCH)
 
-    def _wait_for_element_by(self, by: By, name: str, timeout=30):
+    def _wait_for_element_by(self, by: By, name: str, timeout=30) -> None:
         try:
             element_present = EC.presence_of_element_located((by, name))
             WebDriverWait(self.driver, timeout).until(element_present)
         except TimeoutException:
-            print(logging.warning(f"Timeout occurred after {timeout} seconds"))
+            logging.warning(f"Timeout occurred after {timeout} seconds")
             self.driver.quit()
 
 
