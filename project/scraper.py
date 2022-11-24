@@ -57,7 +57,7 @@ class Scraper:
             logging.info(f"Searching for: {course}")
             self._wait_for_element_by(By.CLASS_NAME, "searchbar-input")
             d.find_element(By.CLASS_NAME, "searchbar-input").send_keys(course.code)
-            time.sleep(0.5)  # Sometimes the filter does not have time to filter and the first course box gets clicked
+            time.sleep(1)  # Sometimes the filter does not have time to filter and the first course box gets clicked
             if (self._search_in_page("Geen zoekresultaten")):
                 logging.info(f"'{course}' was not found, there is no sign up")
                 d.refresh()
