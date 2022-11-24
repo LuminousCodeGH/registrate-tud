@@ -10,7 +10,9 @@ class Courses():
         self.courses: list[Course] = courses
 
     def __str__(self) -> str:
-        _ = sum(f"{course.code}: {course.name} ({course.completed})\n" for course in self.courses)
+        _ = ""
+        for course in self.courses:
+            _ += f"{course.__str__()}\n"
         return _[:-1]
 
     def add_courses(self) -> None:
@@ -33,24 +35,28 @@ class Courses():
                 if (add_another.lower() == "y"):
                     break
 
-    def save(self):
+    def save(self) -> None:
         course_array: np.ndarray = np.array([[course.code, course.name, course.completed] for course in self.courses])
-        course_df: pd.DataFrame = pd.DataFrame(course_array)
+        course_df: pd.DataFrame = pd.DataFrame(course_array, columns=["Code", "Name", "Completed"])
         course_df.to_csv("./courses.csv")
+
+    def get_incomplete(self) -> 'Courses':
+        incomplete_courses: list[Course] = [course for course in self.courses if course.completed == False]
+        return Courses(incomplete_courses)
 
     @staticmethod
     def _read_csv_to_array() -> np.ndarray:
-        return pd.read_csv("./courses.csv").to_numpy()
+        return pd.read_csv("./courses.csv", names=["Code", "Name", "Completed"], header=0).to_numpy()
 
     @staticmethod
     def create_courses_from_path(path="./courses.csv") -> 'Courses':
-        if (not os.path.exists(path)):
-            logging.warning("No data file found!")
-            return Courses([])
         if (not path.endswith(".csv")):
-            logging.warning("Course file must be a .csv!")
-            return None
+            raise ValueError(f"Course file must be a .csv, is '.{path.split('.')[-1]}'")
+        if (not os.path.exists(path)):
+            logging.warning("No data file found! Creating empty object")
+            return Courses([])
         arr: np.ndarray = Courses._read_csv_to_array()
-        courses: list[Courses] = [Course(row[0], row[1], row[2]) for row in arr]
-        print(courses)
+        print(arr)
+        courses: list[Courses] = [Course(row[0], row[1], bool(row[2])) for row in arr]
+        logging.info("Created courses from file")
         return Courses(courses)
