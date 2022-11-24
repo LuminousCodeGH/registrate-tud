@@ -9,18 +9,18 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s - %(name)s - %(message)s', level=logging.INFO)
 
     argparser = argparse.ArgumentParser(prog="RegistrateTUD", description="Get informed about upcoming exams!")
-    argparser.add_argument("add_courses", default=False, help="Add courses to CSV file (default=False)", \
-                           type=bool, nargs=1)
-    args = argparser.parse_args()
-    print(args)
+    argparser.add_argument("-a", "--add_courses", action="store_const", default=False,
+                           help="Add courses to CSV file (default=False)", const=True)
+    args: dict[str] = vars(argparser.parse_args())
 
     courses = Courses.create_courses_from_path("./courses.csv")
-    if (args.add_courses):
+    if (args["add_courses"]):
         courses.add_courses()
         courses.save()
 
-    driver = create_webdriver(browser)
+    driver = create_webdriver("firefox")
 
     scraper = Scraper(driver, courses)
     scraper.scrape_for_courses()
+    scraper.notify()
     _ = input("Press any key to exit...")
