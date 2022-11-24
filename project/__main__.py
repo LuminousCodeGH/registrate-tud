@@ -1,5 +1,5 @@
 from utils import create_webdriver
-from scrape_data import Scraper
+from scraper import Scraper
 from courses import Courses
 from data.prefs import browser
 import logging
