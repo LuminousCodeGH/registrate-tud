@@ -23,7 +23,7 @@ def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None
             driver_options = FirefoxOptions()
             driver_options.headless = is_headless
             driver_options.binary_location = browser_path
-            driver = Firefox(executable_path="./geckodriver.exe", options=driver_options, )
+            driver = Firefox(executable_path="./geckodriver.exe", options=driver_options)
         return driver
     except Exception as e:
         # Catching WebDriverException is not allowed, which is what is called in this case. Hence 'Exception'...
@@ -52,7 +52,8 @@ def save_to_json(creds: dict[str], jpath="./data/creds.json") -> None:
 
 def read_from_json(jpath="./data/creds.json") -> dict[str]:
     if (not os.path.exists(jpath)):
-        raise FileNotFoundError(f"File '{jpath.split('/')[-1]}' was not found at path!")
+        save_to_json({})
+        logging.warning("The creds.json file was not found, so an empty one was created!")
     with open(jpath) as f:
         creds: dict[str] = json.load(f)
     return creds
