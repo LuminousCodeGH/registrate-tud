@@ -15,7 +15,7 @@ class Courses():
             _ += f"{course.__str__()}\n"
         return _[:-1]
 
-    def add_courses(self) -> None:
+    def input_courses(self) -> None:
         while (True):
             code = input("\nPlease input course code: ")
             if (not code):

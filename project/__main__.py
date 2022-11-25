@@ -38,7 +38,7 @@ if __name__ == "__main__":
         utils.save_to_json(creds)
     if (args["add_courses"] or args["initial_setup"]):
         logging.info("Adding courses...")
-        courses.add_courses()
+        courses.input_courses()
         courses.save()
 
     if (not utils.read_from_json()):
