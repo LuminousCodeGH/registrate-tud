@@ -1,10 +1,8 @@
 from courses import Courses
-from course import Course
-from email.message import EmailMessage
-import utils
 import logging
 import smtplib
 import ssl
+
 
 class Mailer:
     def __init__(self, receiver_email: str, sender_email="", pw=""):
