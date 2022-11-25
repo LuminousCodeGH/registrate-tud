@@ -51,7 +51,7 @@ def save_to_json(creds: dict[str], jpath="./data/creds.json") -> None:
 
 
 def read_from_json(jpath="./data/creds.json") -> dict[str]:
-    if (not os.path.exists(jpath)):
+    if not os.path.exists(jpath):
         save_to_json({})
         logging.warning("The creds.json file was not found, so an empty one was created!")
     with open(jpath) as f:
