@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from data.creds import net_id, password
-from constants import COURSE_BOX, COURSE_BTN, SIGN_UP_URL, HOME_URL
+from constants import COURSE_BTN, SIGN_UP_URL, HOME_URL
+from utils import read_from_json, decode_string
 from courses import Courses
 from course import Course
 import time
@@ -44,26 +44,26 @@ class Scraper:
         self.__driver = driver
 
     def scrape_for_courses(self):
+        creds: dict[str] = read_from_json()
         d: Chrome | Firefox = self.driver
-        d.get("https://my.tudelft.nl/#/inschrijven/cursus/:id")
+        d.get("https://my.tudelft.nl/#/inschrijven/toets/:id")
         self._wait_for_element_by(By.XPATH, '//*[@id="submit_button"]')
         logging.info("Attempting login...")
 
-        d.find_element(By.XPATH, '//*[@id="username"]').send_keys(net_id)
-        d.find_element(By.XPATH, '//*[@id="password"]').send_keys(password)
+        d.find_element(By.XPATH, '//*[@id="username"]').send_keys(creds["net_id"])
+        d.find_element(By.XPATH, '//*[@id="password"]').send_keys(decode_string(creds["net_pass"]))
         d.find_element(By.XPATH, '//*[@id="submit_button"]').click()
 
         for course in self._incomplete_courses.courses:
-            logging.info(f"Searching for: {course}")
+            logging.info(f"\nSearching for: {course}...")
             self._wait_for_element_by(By.CLASS_NAME, "searchbar-input")
             d.find_element(By.CLASS_NAME, "searchbar-input").send_keys(course.code)
-            time.sleep(1)  # Sometimes the filter does not have time to filter and the first course box gets clicked
+            self._wait_until_in_page("Geen zoekresultaten", course.code, timeout=10)
             if (self._search_in_page("Geen zoekresultaten")):
                 logging.info(f"'{course}' was not found, there is no sign up")
                 d.refresh()
                 continue
-            self._wait_for_element_by(By.XPATH, COURSE_BOX)
-            d.find_element(By.XPATH, COURSE_BOX).click()
+            d.find_element(By.CSS_SELECTOR, ".osi-ion-item").click()
             
             i: int = 0
             while (True or i < 6):
@@ -74,6 +74,9 @@ class Scraper:
                 elif (self._search_in_page("Selecteer een toetsgelegenheid")):
                     logging.info(f"'{course}' is open for sign up!")
                     self.__available_courses.append(course)
+                    break
+                elif (self._search_in_page("geen deel uit van het vaste deel van je examenprogramma")):
+                    logging.warning(f"'{course}' is not part of your default course program!")
                     break
                 time.sleep(0.5)
             d.refresh()
@@ -93,8 +96,23 @@ class Scraper:
             logging.warning(f"Timeout occurred after {timeout} seconds. Quitting...")
             self.driver.quit()
     
-    def _search_in_page(self, text) -> bool:
+    def _search_in_page(self, text: str) -> bool:
         return self.driver.execute_script(f'return document.body.innerHTML.includes("{text}")')
+
+    def _wait_until_in_page(self, *texts: str, timeout=30.0) -> bool:
+        t: float = 0.0
+        increment: float = 0.5
+        complete: bool = False
+        while (t < timeout and not complete):
+            for text in texts:
+                complete = self._search_in_page(text)
+                if (complete):
+                    break
+            time.sleep(increment)
+            t += increment
+        if (t >= timeout):
+            raise TimeoutError(f"Could not find '{text}' in page!")
+        return complete
 
     def _refresh_course_page(self) -> None:
         self.driver.get(HOME_URL)
