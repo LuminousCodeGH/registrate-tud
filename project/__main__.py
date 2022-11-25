@@ -15,6 +15,8 @@ if __name__ == "__main__":
                            help="Add courses to CSV file (default=False)", const=True)
     argparser.add_argument("-i", "--initial_setup", action="store_const", default=False,
                            help="Runs the program as if it were the first time", const=True)
+    argparser.add_argument("-q", "--quit", action="store_const", default=False,
+                           help="Quits the script instantly at the end, without waiting for input", const=True)
     args: dict[str] = vars(argparser.parse_args())
 
     if (browser != "firefox" and browser != "chrome"):
@@ -51,4 +53,5 @@ if __name__ == "__main__":
     scraper = Scraper(driver, courses)
     scraper.scrape_for_courses()
     scraper.notify()
-    _ = input("Press any key to exit...")
+    if (not args["quit"]):
+        _ = input("Press any key to exit...")
