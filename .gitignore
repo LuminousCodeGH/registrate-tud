@@ -3,6 +3,7 @@
 courses.csv
 project/chromedriver.exe
 project/geckodriver.exe
+project/geckodriver.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
