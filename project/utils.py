@@ -58,4 +58,4 @@ def read_from_json(jpath="./data/creds.json") -> dict[str]:
         return {}
     with open(jpath) as f:
         creds: dict[str] = json.load(f)
-    print(creds)
+    return creds
