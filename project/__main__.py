@@ -29,6 +29,8 @@ if __name__ == "__main__":
         print("The sender email is logged into to send emails in case there are open sign ups")
         print("It is recommended you use an unimportant or dedicated script email")
         creds["sender_mail"]: str = input("Please input the sender email: ")
+        print("The password has to be a google app password in the case of gmail:")
+        print("https://support.google.com/accounts/answer/185833?hl=en")
         sender_pass: str = getpass.getpass("Please input the corresponding password: ")
         print("The receiver email is the email the sender sends the notifications to")
         print("This can be the same as the sender email")
