@@ -18,7 +18,7 @@ class Scraper:
         self.__available_courses: Courses = Courses([])
     
     def __exit__(self) -> None:
-        if (self.driver != None):
+        if self.driver is not None:
             self.driver.quit()
 
     @property
@@ -27,7 +27,7 @@ class Scraper:
 
     @courses.setter
     def courses(self, courses: Courses) -> None:
-        if (not courses.courses):
+        if not courses.courses:
             logging.warning("The 'courses' object is empty!")
         self._courses = courses
         self._incomplete_courses = courses.get_incomplete()
@@ -39,7 +39,7 @@ class Scraper:
 
     @driver.setter
     def driver(self, driver: Chrome | Firefox) -> None:
-        if (not isinstance(driver, Chrome) and not isinstance(driver, Firefox)):
+        if not isinstance(driver, Chrome) and not isinstance(driver, Firefox):
             raise ValueError(f"Driver needs to be a Firefox or Chrome driver, not: '{type(driver)}'")
         self.__driver = driver
 
@@ -60,23 +60,23 @@ class Scraper:
             self._wait_for_element_by(By.CLASS_NAME, "searchbar-input")
             d.find_element(By.CLASS_NAME, "searchbar-input").send_keys(course.code)
             self._wait_until_in_page("Geen zoekresultaten", course.code, timeout=10)
-            if (self._search_in_page("Geen zoekresultaten")):
+            if self._search_in_page("Geen zoekresultaten"):
                 logging.info(f"'{course}' was not found, there is no sign up")
                 d.refresh()
                 continue
             d.find_element(By.CSS_SELECTOR, ".osi-ion-item").click()
             
             i: int = 0
-            while (True or i < 6):
+            while True or i < 6:
                 i += 1
-                if (self._search_in_page("Helaas")):
+                if self._search_in_page("Helaas"):
                     logging.info(f"You are not able to sign up for '{course}'")
                     break
-                elif (self._search_in_page("Selecteer een toetsgelegenheid")):
+                elif self._search_in_page("Selecteer een toetsgelegenheid"):
                     logging.info(f"'{course}' is open for sign up!")
                     self.__available_courses.add(course)
                     break
-                elif (self._search_in_page("geen deel uit van het vaste deel van je examenprogramma")):
+                elif self._search_in_page("geen deel uit van het vaste deel van je examenprogramma"):
                     logging.warning(f"'{course}' is not part of your default course program!")
                     break
                 time.sleep(0.5)
@@ -85,7 +85,7 @@ class Scraper:
         d.close()
 
     def notify(self, method="mail"):
-        if (method == "mail"):
+        if method == "mail":
             logging.info("Sending email!")
             creds: dict[str] = read_from_json()
             notifier = Mailer(creds["receiver_mail"], creds["sender_mail"], decode_string(creds["mail_pass"]))
@@ -106,14 +106,14 @@ class Scraper:
         t: float = 0.0
         increment: float = 0.5
         complete: bool = False
-        while (t < timeout and not complete):
+        while t < timeout and not complete:
             for text in texts:
                 complete = self._search_in_page(text)
-                if (complete):
+                if complete:
                     break
             time.sleep(increment)
             t += increment
-        if (t >= timeout):
+        if t >= timeout:
             raise TimeoutError(f"Could not find '{text}' in page!")
         return complete
 
