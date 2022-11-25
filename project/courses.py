@@ -56,7 +56,6 @@ class Courses():
             logging.warning("No data file found! Creating empty object")
             return Courses([])
         arr: np.ndarray = Courses._read_csv_to_array()
-        print(arr)
         courses: list[Courses] = [Course(row[0], row[1], bool(row[2])) for row in arr]
         logging.info("Created courses from file")
         return Courses(courses)
