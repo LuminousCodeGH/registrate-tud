@@ -2,7 +2,7 @@ from selenium.webdriver import Chrome, Firefox
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as ec
 from constants import COURSE_BTN, SIGN_UP_URL, HOME_URL
 from utils import read_from_json, decode_string
 from courses import Courses
@@ -93,7 +93,7 @@ class Scraper:
 
     def _wait_for_element_by(self, by: By, name: str, timeout=30) -> None:
         try:
-            element_present = EC.presence_of_element_located((by, name))
+            element_present = ec.presence_of_element_located((by, name))
             WebDriverWait(self.driver, timeout).until(element_present)
         except TimeoutException:
             logging.warning(f"Timeout occurred after {timeout} seconds. Quitting...")
