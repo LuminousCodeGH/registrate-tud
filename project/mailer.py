@@ -1,4 +1,7 @@
 from courses import Courses
+from course import Course
+from email.message import EmailMessage
+import utils
 import logging
 import smtplib
 import ssl
@@ -29,19 +32,18 @@ class Mailer:
             raise ValueError("The password is empty, make sure to set it using 'python __main__.py -i'")
         self.__email_pass = value
 
-    def setup_smtp(self, open_courses: Courses, port=465, smtp_host="smtp.gmail.com"):
+    def send_mail(self, open_courses: Courses, port=465, smtp_host="smtp.gmail.com"):
         context = ssl.create_default_context()
-        message: str = "\
-                       Subject: No open sign ups found!\
-                       No open sign ups were found, you don't have to do anything."
+        subject: str = "No open sign ups found!"
+        body: str = "No open sign ups were found, you don't have to do anything."
 
         try:
             with smtplib.SMTP_SSL(smtp_host, port, context=context) as server:
                 server.login(self.sender_email, self.__email_pass)
                 if (open_courses):
-                    message = f"\
-                               Subject: Open courses available!\
-                               The following courses are available for sign up:\n{open_courses}"
-                    server.sendmail(self.sender_email, self.receiver_email, message)
+                    subject = "Open courses available!"
+                    body = f"The following courses are available for sign up:\n{open_courses}\n\n\n--RegistrateTUD"
+                msg: str = f"Subject: {subject}\n\n{body}"
+                server.sendmail(self.sender_email, self.receiver_email, msg)
         except Exception as e:
             logging.error(f"An error occured while sending the email:\n{e}")
