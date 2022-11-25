@@ -32,7 +32,6 @@ def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None
 
 
 def encode_string(value: str) -> str:
-    logging.info("Encoding a value...")
     value_bytes: bytes = value.encode('ascii')
     value_bytes = base64.b64encode(value_bytes)
     value_b64: str = value_bytes.decode('ascii')
@@ -40,7 +39,6 @@ def encode_string(value: str) -> str:
 
 
 def decode_string(value_b64: str) -> str:
-    logging.info("Decoding a value...")
     value_b64_bytes: bytes = value_b64.encode('ascii')
     value_bytes: bytes = base64.b64decode(value_b64_bytes)
     value: str = value_bytes.decode('ascii')
@@ -54,8 +52,7 @@ def save_to_json(creds: dict[str], jpath="./data/creds.json") -> None:
 
 def read_from_json(jpath="./data/creds.json") -> dict[str]:
     if (not os.path.exists(jpath)):
-        logging.warning(f"File '{jpath.split('/')[-1]}' was not found at path!")
-        return {}
+        raise FileNotFoundError(f"File '{jpath.split('/')[-1]}' was not found at path!")
     with open(jpath) as f:
         creds: dict[str] = json.load(f)
     return creds
