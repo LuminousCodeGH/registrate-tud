@@ -1,3 +1,8 @@
+import sys
+
+if sys.version_info.major < 3 or sys.version_info.minor < 10:
+    raise AssertionError(f"Python version 3.10 is required, you are running: {sys.version}")
+
 from scraper import Scraper
 from courses import Courses
 from data.prefs import browser
