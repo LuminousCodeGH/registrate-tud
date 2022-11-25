@@ -34,6 +34,12 @@ class Courses():
                 add_another = input("Are these all the courses you want to add? (y/n): ")
                 if (add_another.lower() == "y"):
                     break
+    
+    def add(self, course: Course) -> None:
+        if (isinstance(course, Course)):
+            self.courses.append(course)
+        else:
+            raise ValueError(f"Course must be of class '{type(Course)}'")
 
     def save(self) -> None:
         course_array: np.ndarray = np.array([[course.code, course.name, course.completed] for course in self.courses])

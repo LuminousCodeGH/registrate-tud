@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from constants import COURSE_BTN, SIGN_UP_URL, HOME_URL
 from utils import read_from_json, decode_string
 from courses import Courses
-from course import Course
+from mailer import Mailer
 import time
 import logging
 
@@ -15,7 +15,7 @@ class Scraper:
     def __init__(self, driver: Chrome | Firefox, courses: Courses):
         self.courses: Courses = courses
         self.driver: Chrome | Firefox = driver
-        self.__available_courses: list[Course] = []
+        self.__available_courses: Courses = Courses([])
     
     def __exit__(self) -> None:
         if (self.driver != None):
@@ -55,7 +55,8 @@ class Scraper:
         d.find_element(By.XPATH, '//*[@id="submit_button"]').click()
 
         for course in self._incomplete_courses.courses:
-            logging.info(f"\nSearching for: {course}...")
+            print("")
+            logging.info(f"Searching for: {course}...")
             self._wait_for_element_by(By.CLASS_NAME, "searchbar-input")
             d.find_element(By.CLASS_NAME, "searchbar-input").send_keys(course.code)
             self._wait_until_in_page("Geen zoekresultaten", course.code, timeout=10)
@@ -73,7 +74,7 @@ class Scraper:
                     break
                 elif (self._search_in_page("Selecteer een toetsgelegenheid")):
                     logging.info(f"'{course}' is open for sign up!")
-                    self.__available_courses.append(course)
+                    self.__available_courses.add(course)
                     break
                 elif (self._search_in_page("geen deel uit van het vaste deel van je examenprogramma")):
                     logging.warning(f"'{course}' is not part of your default course program!")
@@ -86,7 +87,9 @@ class Scraper:
     def notify(self, method="mail"):
         if (method == "mail"):
             logging.info("Sending email!")
-            print(self.__available_courses)
+            creds: dict[str] = read_from_json()
+            notifier = Mailer(creds["receiver_mail"], creds["sender_mail"], decode_string(creds["mail_pass"]))
+            notifier.send_mail(self.__available_courses)
 
     def _wait_for_element_by(self, by: By, name: str, timeout=30) -> None:
         try:
