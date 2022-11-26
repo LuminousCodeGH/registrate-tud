@@ -66,7 +66,7 @@ to check manually which exams are available. Whether or not it is worth the effo
 
 ## Authors
 
-This project is solely developed by: Jacob Reaves [Email](J.M.Reaves@student.tudelft.nl)
+This project is solely developed by: Jacob Reaves
 
 ## License
 
