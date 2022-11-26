@@ -39,6 +39,7 @@ to check manually which exams are available. Whether or not it is worth the effo
 * Configure the ./project/data/prefs.py
 * Run the initial setup
     * On Windows: type `python.exe -m project.__main__.py -i` in the terminal or run init.cmd
+    * On MacOS / Linux: type `python -m project.__main__.py -i` in the terminal (NOTE: MacOS / Linux not supported yet)
 
 ### Executing program
 
