@@ -26,6 +26,6 @@ to check manually which exams are available. Whether or not it is worth the effo
 * Python 3.10+
 * Libraries: see requirements.txt
 * Chrome or Firefox
-* A respective driver (NOTE: Driver version should match the browser version):
+* A respective driver (NOTE: Driver version should match the browser version)
     * Chrome:  https://chromedriver.storage.googleapis.com/index.html
     * Firefox: https://github.com/mozilla/geckodriver/releases
