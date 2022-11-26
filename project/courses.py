@@ -86,7 +86,7 @@ class Courses:
         and returns the new object.
 
         Returns:
-            Courses: A new Courses instance derived from the main instance where all there courses are not
+            Courses: A new Courses instance derived from the main instance where all courses are not
                 set as completed. 
         """
         incomplete_courses: list[Course] = [course for course in self.courses if course.completed == False]
