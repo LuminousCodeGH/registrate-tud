@@ -29,3 +29,45 @@ to check manually which exams are available. Whether or not it is worth the effo
 * A respective driver (NOTE: Driver version should not exceed the browser version)
     * Chrome:  https://chromedriver.storage.googleapis.com/index.html
     * Firefox: https://github.com/mozilla/geckodriver/releases
+
+### Installing
+
+#### Initial Setup
+
+* Clone the repo `git clone https://github.com/LuminousCodeGH/RegistrateTUD.git`
+* Install the respective webdriver and place it in ./project
+* Configure the ./project/data/prefs.py
+* Run the initial setup
+    * On Windows: type `python.exe -m project.__main__.py -i` in the terminal or run init.cmd
+
+### Executing program
+
+#### Windows Standard
+
+* Run run.cmd or type `python.exe -m project.__main__.py` in the terminal
+    * In case you want to add courses after intial setup, use the `-a` or `--add_courses` argument
+
+#### Windows Schedule
+
+* Open 'Task Scheduler'
+* Under 'Actions' press 'Create Basic Task'
+* Configure the task to your liking, but consider the following:
+    * Under trigger, it is recommended you add a random delay
+    * Under actions, select 'Start a program' and point to `schedule.cmd`
+
+## Help
+
+* To get a list of arguments type `python.exe -m project.__main__.py -h` in the terminal
+* In case of a `TimeoutException` while scraping, it is possible the credentials are incorrect. To fix this you can:
+    * Rerun the init.cmd
+    * Manually adjust the credentials in ./project/data/creds.json (NOTE: Passwords are base64 encoded)
+* In case of a exception while sending the email, most likely the credentials are incorrect again. See bullet above
+    * NOTE: Only sending from a Google mail has been tested, change smtp host and port at your own risk
+
+## Authors
+
+This project is solely developed by: Jacob Reaves [Email](J.M.Reaves@student.tudelft.nl)
+
+## License
+
+This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 - see the LICENSE.md file for details
