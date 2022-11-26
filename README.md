@@ -14,8 +14,8 @@ be needed once. A full guide on how to install this script can be seen in 'Insta
 
 It is recommended that you put this script on a device that constantly runs in the background (such as a home server)
 and schedule this script every so often with a random time delay (see 'Executing program'). That way you will passively 
-get emails sent to you about which exams you should sign up to. NOTE: Use -q to instantly quit the script after 
-its completion. However, how you use this script is up to you, it is still faster to run this script that 
+get emails sent to you about which exams you should sign up to (NOTE: Use `-q` to instantly quit the script after 
+its completion). However, how you use this script is up to you, it is still faster to run this script that 
 to check manually which exams are available. Whether or not it is worth the effort of running the script is the question.
 
 ## Getting Started
