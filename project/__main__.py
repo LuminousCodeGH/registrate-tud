@@ -53,7 +53,7 @@ if __name__ == "__main__":
     if not utils.read_from_json():
         raise ValueError("Credentials cannot be empty!")
 
-    driver = utils.create_webdriver("firefox")
+    driver = utils.create_webdriver(browser)
 
     scraper = Scraper(driver, courses)
     scraper.scrape_for_courses()
