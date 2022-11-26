@@ -1,3 +1,8 @@
+import sys
+
+if sys.version_info.major < 3 or sys.version_info.minor < 10:
+    raise AssertionError(f"Python version 3.10 is required, you are running: {sys.version}")
+
 from scraper import Scraper
 from courses import Courses
 from data.prefs import browser
@@ -19,11 +24,11 @@ if __name__ == "__main__":
                            help="Quits the script instantly at the end, without waiting for input", const=True)
     args: dict[str] = vars(argparser.parse_args())
 
-    if (browser != "firefox" and browser != "chrome"):
+    if browser != "firefox" and browser != "chrome":
         raise ValueError("Browser must be firefox or chrome!")
 
     courses = Courses.create_courses_from_path("./courses.csv")
-    if (args["initial_setup"]):
+    if args["initial_setup"]:
         creds: dict[str] = {}
         logging.info("Running initial setup...")
         creds["net_id"]: str = input("Please input your TU Delft net id: ")
@@ -40,12 +45,12 @@ if __name__ == "__main__":
         creds["net_pass"] = utils.encode_string(net_pass)
         creds["mail_pass"] = utils.encode_string(sender_pass)
         utils.save_to_json(creds)
-    if (args["add_courses"] or args["initial_setup"]):
+    if args["add_courses"] or args["initial_setup"]:
         logging.info("Adding courses...")
         courses.input_courses()
         courses.save()
 
-    if (not utils.read_from_json()):
+    if not utils.read_from_json():
         raise ValueError("Credentials cannot be empty!")
 
     driver = utils.create_webdriver("firefox")
@@ -53,5 +58,5 @@ if __name__ == "__main__":
     scraper = Scraper(driver, courses)
     scraper.scrape_for_courses()
     scraper.notify()
-    if (not args["quit"]):
+    if not args["quit"]:
         _ = input("Press any key to exit...")

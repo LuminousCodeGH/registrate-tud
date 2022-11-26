@@ -9,17 +9,17 @@ import os
 def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None:
     logging.info(f"Creating {browser} webdriver...")
     if browser != "chrome" and browser != "firefox":
-        if (browser == ""):
+        if browser == "":
             logging.error(f"Browser type 'browser' seems to be unset. Set it in ./data/prefs.py")
             return
         logging.error(f"Browser type '{browser}' not recognized. Did you set it correctly in data/prefs.py?")
         return
     try:
-        if (browser == "chrome"):
+        if browser == "chrome":
             driver_options = ChromeOptions()
             driver_options.headless = is_headless
             driver = Chrome(executable_path="./chromedriver.exe", options=driver_options)
-        elif (browser == "firefox"):
+        elif browser == "firefox":
             driver_options = FirefoxOptions()
             driver_options.headless = is_headless
             driver_options.binary_location = browser_path
@@ -51,7 +51,7 @@ def save_to_json(creds: dict[str], jpath="./data/creds.json") -> None:
 
 
 def read_from_json(jpath="./data/creds.json") -> dict[str]:
-    if (not os.path.exists(jpath)):
+    if not os.path.exists(jpath):
         save_to_json({})
         logging.warning("The creds.json file was not found, so an empty one was created!")
     with open(jpath) as f:
