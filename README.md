@@ -54,7 +54,7 @@ to check manually which exams are available. Whether or not it is worth the effo
 * Under 'Actions' press 'Create Basic Task'
 * Configure the task to your liking, but consider the following:
     * Under trigger, it is recommended you add a random delay
-    * Under actions, select 'Start a program' and point to `schedule.cmd`
+    * Under actions, select 'Start a program' and point to schedule.cmd
 
 ## Help
 
@@ -65,10 +65,14 @@ to check manually which exams are available. Whether or not it is worth the effo
 * In case of a exception while sending the email, most likely the credentials are incorrect again. See bullet above
     * NOTE: Only sending from a Google mail has been tested, change smtp host and port at your own risk
 
+## Future Implementations
+
+* Telegram API integration for notifications
+
 ## Authors
 
-This project is solely developed by: Jacob Reaves
+This project is solely developed and maintained by Jacob Reaves
 
 ## License
 
-This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 - see the LICENSE.md file for details
+Licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 - see the LICENSE.md file for details
