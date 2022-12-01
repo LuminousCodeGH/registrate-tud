@@ -63,7 +63,7 @@ to check manually which exams are available. Whether or not it is worth the effo
     * Rerun the init.cmd
     * Manually adjust the credentials in ./project/data/creds.json (NOTE: Passwords are base64 encoded)
 * In case of a exception while sending the email, most likely the credentials are incorrect again. See bullet above
-    * NOTE: Only sending from a Google mail has been tested, change smtp host and port at your own risk
+    * NOTE: Only sending from a Google mail has been tested, change `smtp_host` and `port` at your own risk
 
 ## Future Implementations
 
