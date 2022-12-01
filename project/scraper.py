@@ -68,7 +68,7 @@ class Scraper:
         """
         creds: dict[str] = read_from_json()
         d: Chrome | Firefox = self.driver
-        d.get("https://my.tudelft.nl/#/inschrijven/toets/:id")
+        d.get(SIGN_UP_URL)
         self._wait_for_element_by(By.XPATH, '//*[@id="submit_button"]')
         logging.info("Attempting login...")
 
