@@ -65,6 +65,11 @@ class Scraper:
         """
         The main method of the Scraper class. This scrapes the MyTUD exam page for possible signups according to
         the courses the user has provided after logging in with the credentials the user provided for MyTUD.
+
+            Step 1: Attempt to access the MyTUD website.
+            Step 2: In case a new session is required (basically always), attempt login using user credentials.
+            Step 3: Cycle through the incomplete courses and check if any signups are open.
+            Step 4: Close the driver.
         """
         creds: dict[str] = read_from_json()
         d: Chrome | Firefox = self.driver
@@ -182,14 +187,3 @@ class Scraper:
         if t >= timeout:
             raise TimeoutError(f"Could not find '{text}' in page!")
         return complete
-
-    def _refresh_course_page(self) -> None:
-        """
-        Shortcut to refresh the course page. In the case of the course page driver.refresh doesn't work because
-        the page URL doesn't change after selecting a course.
-        """
-        self.driver.get(HOME_URL)
-        self._wait_for_element_by(By.XPATH, COURSE_BTN)
-        self.driver.get(SIGN_UP_URL)
-
-
