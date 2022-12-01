@@ -3,8 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from constants import COURSE_BTN, SIGN_UP_URL, HOME_URL, \
-                      NO_COURSES_FOUND, UNABLE_TO_SIGNUP, SIGNUP_AVAILABLE, NOT_IN_PROGRAM
+from constants import SIGN_UP_URL, NO_COURSES_FOUND, UNABLE_TO_SIGNUP, SIGNUP_AVAILABLE, NOT_IN_PROGRAM
 from utils import read_from_json, decode_string
 from courses import Courses
 from mailer import Mailer
