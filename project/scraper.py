@@ -12,12 +12,29 @@ import logging
 
 
 class Scraper:
+    """
+    This class scrapes the MyTUD website for courses that have open exam signups and stores them in a
+    Courses object as a Course.
+    """
     def __init__(self, driver: Chrome | Firefox, courses: Courses):
+        """
+        The initialiser method for the Scraper class.
+
+        Args:
+            driver (Chrome | Firefox): The webdriver the scraper should use when scraping. NOTE: Firefox is
+                recommended since Chrome keeps on giving warnings. So far this has not impacted performance though.
+            courses (Courses): A Courses object with all of the courses the user has specified they are following.
+                Using this instance a list of available courses will be generated.
+        """
         self.courses: Courses = courses
         self.driver: Chrome | Firefox = driver
         self.__available_courses: Courses = Courses([])
     
     def __exit__(self) -> None:
+        """
+        This method makes sure to kill the driver and release any resources it is hoarding when the script closes
+        or crashes. No need to do anything with this.
+        """
         if self.driver is not None:
             self.driver.quit()
 
@@ -44,6 +61,10 @@ class Scraper:
         self.__driver = driver
 
     def scrape_for_courses(self):
+        """
+        The main method of the Scraper class. This scrapes the MyTUD exam page for possible signups according to
+        the courses the user has provided after logging in with the credentials the user provided for MyTUD.
+        """
         creds: dict[str] = read_from_json()
         d: Chrome | Firefox = self.driver
         d.get("https://my.tudelft.nl/#/inschrijven/toets/:id")
@@ -85,6 +106,17 @@ class Scraper:
         d.close()
 
     def notify(self, method="mail"):
+        """
+        Attempts to send a notification to the user with the courses for which exams are open for sign up. So
+        far, only notifying by mail has been implemented.
+            'mail': Creates a Mailer object to send an email with to a user specified one.
+            'telegram': Not implemented.
+        TODO: Integrate the Telegram API to work as a notification method.
+
+        Args:
+            method (str, optional): User specified method of notification. Defaults to "mail" since this is the
+                only method implemented so far.
+        """
         if method == "mail":
             logging.info("Sending email!")
             creds: dict[str] = read_from_json()
@@ -92,6 +124,16 @@ class Scraper:
             notifier.send_mail(self.__available_courses)
 
     def _wait_for_element_by(self, by: By, name: str, timeout=30) -> None:
+        """
+        Tells the driver to pause the script until a certain element is loaded in the page. WARNING: Sometimes
+        WebDriverWait.until will trigger before the page has time to update causing the script to continue prematurely. 
+        This is the case especially when using filters, so use _wait_until_in_page in those cases!
+
+        Args:
+            by (By): The method of pointing to a specific element. Usually XPATH, CSS_SELECTOR or CLASS_NAME.
+            name (str): A string with the name or path to a specific element.
+            timeout (int, optional): How many seconds to pause for before throwing an error. Defaults to 30.
+        """
         try:
             element_present = ec.presence_of_element_located((by, name))
             WebDriverWait(self.driver, timeout).until(element_present)
@@ -100,9 +142,32 @@ class Scraper:
             self.driver.quit()
     
     def _search_in_page(self, text: str) -> bool:
+        """
+        Shortcut to run a JS command inside the driver to look for a string of text inside the HTML of the page. A
+        more reliable way of looking for text in the page than using driver.page_source.
+
+        Args:
+            text (str): The string to look for inside of the HTML.
+
+        Returns:
+            bool: Whether the text has been found in the page or not.
+        """
         return self.driver.execute_script(f'return document.body.innerHTML.includes("{text}")')
 
     def _wait_until_in_page(self, *texts: str, timeout=30.0) -> bool:
+        """
+        Waits until one of the specified strings is found in the page. Uses _search_in_page.
+
+        Args:
+            timeout (float, optional): How many seconds to wait before throwing an exception. Defaults to 30.0.
+
+        Raises:
+            TimeoutError: In case the timeout in seconds has been exceeded. Prevents infinite waits in case the
+                page front-end changes.
+
+        Returns:
+            bool: Whether one of the phrases has been found in the page or not.
+        """
         t: float = 0.0
         increment: float = 0.5
         complete: bool = False
@@ -118,6 +183,10 @@ class Scraper:
         return complete
 
     def _refresh_course_page(self) -> None:
+        """
+        Shortcut to refresh the course page. In the case of the course page driver.refresh doesn't work because
+        the page URL doesn't change after selecting a course.
+        """
         self.driver.get(HOME_URL)
         self._wait_for_element_by(By.XPATH, COURSE_BTN)
         self.driver.get(SIGN_UP_URL)
