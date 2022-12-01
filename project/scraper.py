@@ -3,7 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from constants import COURSE_BTN, SIGN_UP_URL, HOME_URL
+from constants import COURSE_BTN, SIGN_UP_URL, HOME_URL, \
+                      NO_COURSES_FOUND, UNABLE_TO_SIGNUP, SIGNUP_AVAILABLE, NOT_IN_PROGRAM
 from utils import read_from_json, decode_string
 from courses import Courses
 from mailer import Mailer
@@ -80,8 +81,8 @@ class Scraper:
             logging.info(f"Searching for: {course}...")
             self._wait_for_element_by(By.CLASS_NAME, "searchbar-input")
             d.find_element(By.CLASS_NAME, "searchbar-input").send_keys(course.code)
-            self._wait_until_in_page("Geen zoekresultaten", course.code, timeout=10)
-            if self._search_in_page("Geen zoekresultaten"):
+            self._wait_until_in_page(NO_COURSES_FOUND, course.code, timeout=10)
+            if self._search_in_page(NO_COURSES_FOUND):
                 logging.info(f"'{course}' was not found, there is no sign up")
                 d.refresh()
                 continue
@@ -90,14 +91,14 @@ class Scraper:
             i: int = 0
             while True or i < 6:
                 i += 1
-                if self._search_in_page("Helaas"):
+                if self._search_in_page(UNABLE_TO_SIGNUP):
                     logging.info(f"You are not able to sign up for '{course}'")
                     break
-                elif self._search_in_page("Selecteer een toetsgelegenheid"):
+                elif self._search_in_page(SIGNUP_AVAILABLE):
                     logging.info(f"'{course}' is open for sign up!")
                     self.__available_courses.add(course)
                     break
-                elif self._search_in_page("geen deel uit van het vaste deel van je examenprogramma"):
+                elif self._search_in_page(NOT_IN_PROGRAM):
                     logging.warning(f"'{course}' is not part of your default course program!")
                     break
                 time.sleep(0.5)

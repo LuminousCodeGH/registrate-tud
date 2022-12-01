@@ -6,3 +6,9 @@ COURSE_BTN = '/html/body/ion-app/app-root/ion-app-wrapper/ion-split-pane/ion-nav
 # URLs
 SIGN_UP_URL = "https://my.tudelft.nl/#/inschrijven/cursus/:id"
 HOME_URL = "https://my.tudelft.nl/#/home"
+
+# Identifiable strings
+NO_COURSES_FOUND = "Geen zoekresultaten"
+UNABLE_TO_SIGNUP = "Helaas"
+SIGNUP_AVAILABLE = "Selecteer een toetsgelegenheid"
+NOT_IN_PROGRAM = "geen deel uit van het vaste deel van je examenprogramma"
