@@ -67,7 +67,9 @@ to check manually which exams are available. Whether or not it is worth the effo
 
 ## Future Implementations
 
-* Telegram API integration for notifications
+* Integrate Telegram API for notifications as an alternative to sending an email
+* Add support for Linux and MacOS and instructions on how to set the script up on the respective platform
+* Implement marking courses as complete after the last exam has been passed
 
 ## Authors
 
@@ -75,4 +77,4 @@ This project is solely developed and maintained by Jacob Reaves
 
 ## License
 
-Licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 - see the LICENSE.md file for details
+Licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 - see the LICENSE file for details
