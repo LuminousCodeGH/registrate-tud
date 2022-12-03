@@ -1,4 +1,4 @@
-from courses import Courses
+from project.courses import Courses
 import logging
 import smtplib
 import ssl

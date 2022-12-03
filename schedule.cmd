@@ -1,1 +1,1 @@
-python.exe -m project.__main__.py -q
+python.exe -m project.__main__ -q

@@ -1,5 +1,5 @@
 from selenium.webdriver import Chrome, ChromeOptions, Firefox, FirefoxOptions
-from data.prefs import browser_path
+from project.data.prefs import browser_path
 import logging
 import base64
 import json
@@ -32,12 +32,12 @@ def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None
         if browser == "chrome":
             driver_options = ChromeOptions()
             driver_options.headless = is_headless
-            driver = Chrome(executable_path="./chromedriver.exe", options=driver_options)
+            driver = Chrome(executable_path="./project/chromedriver.exe", options=driver_options)
         elif browser == "firefox":
             driver_options = FirefoxOptions()
             driver_options.headless = is_headless
             driver_options.binary_location = browser_path
-            driver = Firefox(executable_path="./geckodriver.exe", options=driver_options)
+            driver = Firefox(executable_path="./project/geckodriver.exe", options=driver_options)
         return driver
     except Exception as e:
         # Catching WebDriverException is not allowed, which is what is called in this case. Hence 'Exception'...
@@ -80,7 +80,7 @@ def decode_string(value_b64: str) -> str:
     return value
 
 
-def save_to_json(creds: dict[str], jpath="./data/creds.json") -> None:
+def save_to_json(creds: dict[str], jpath="./project/data/creds.json") -> None:
     """
     Saves credentials to the creds.json.
 
@@ -92,7 +92,7 @@ def save_to_json(creds: dict[str], jpath="./data/creds.json") -> None:
         json.dump(creds, f)
 
 
-def read_from_json(jpath="./data/creds.json") -> dict[str]:
+def read_from_json(jpath="./project/data/creds.json") -> dict[str]:
     """
     Read the user credentials from file or create an empty file in case such file does not exist.
 

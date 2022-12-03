@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import logging
 import os
-from course import Course
+from project.course import Course
 
 
 class Courses:
@@ -78,7 +78,7 @@ class Courses:
         """
         course_array: np.ndarray = np.array([[course.code, course.name, course.completed] for course in self.courses])
         course_df: pd.DataFrame = pd.DataFrame(course_array, columns=["Code", "Name", "Completed"])
-        course_df.to_csv("./courses.csv")
+        course_df.to_csv("./project/courses.csv")
 
     def get_incomplete(self) -> 'Courses':
         """
@@ -101,10 +101,10 @@ class Courses:
         Returns:
             np.ndarray: An array containing all saved course information.
         """
-        return pd.read_csv("./courses.csv", names=["Code", "Name", "Completed"], header=0).to_numpy()
+        return pd.read_csv("./project/courses.csv", names=["Code", "Name", "Completed"], header=0).to_numpy()
 
     @staticmethod
-    def create_courses_from_path(path="./courses.csv") -> 'Courses':
+    def create_courses_from_path(path="./project/courses.csv") -> 'Courses':
         # TODO: Move the courses.csv to ./data/ and update the class to function appropriately.
         """
         Generates a new Courses instance by reading a file (default is courses.csv) and returns the instance. Should

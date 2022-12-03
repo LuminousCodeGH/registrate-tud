@@ -3,12 +3,12 @@ import sys
 if sys.version_info.major < 3 or sys.version_info.minor < 10:
     raise AssertionError(f"Python version 3.10 is required, you are running: {sys.version}")
 
-from scraper import Scraper
-from courses import Courses
-from data.prefs import browser
+from project.scraper import Scraper
+from project.courses import Courses
+from project.data.prefs import browser, notification_method
+from project.utils import read_from_json, save_to_json, encode_string, decode_string, create_webdriver
 import logging
 import argparse
-import utils
 import getpass
 
 
@@ -23,11 +23,12 @@ if __name__ == "__main__":
     argparser.add_argument("-q", "--quit", action="store_const", default=False,
                            help="Quits the script instantly at the end, without waiting for input", const=True)
     args: dict[str] = vars(argparser.parse_args())
+    creds: dict[str] = read_from_json()
 
     if browser != "firefox" and browser != "chrome":
         raise ValueError("Browser must be firefox or chrome!")
 
-    courses = Courses.create_courses_from_path("./courses.csv")
+    courses = Courses.create_courses_from_path("./project/courses.csv")
     if args["initial_setup"]:
         creds: dict[str] = {}
         logging.info("Running initial setup...")
@@ -42,18 +43,18 @@ if __name__ == "__main__":
         print("The receiver email is the email the sender sends the notifications to")
         print("This can be the same as the sender email")
         creds["receiver_mail"] = input("Please input the receiver email: ")
-        creds["net_pass"] = utils.encode_string(net_pass)
-        creds["mail_pass"] = utils.encode_string(sender_pass)
-        utils.save_to_json(creds)
+        creds["net_pass"] = encode_string(net_pass)
+        creds["mail_pass"] = encode_string(sender_pass)
+        save_to_json(creds)
     if args["add_courses"] or args["initial_setup"]:
         logging.info("Adding courses...")
         courses.input_courses()
         courses.save()
 
-    if not utils.read_from_json():
+    if not read_from_json():
         raise ValueError("Credentials cannot be empty!")
 
-    driver = utils.create_webdriver(browser)
+    driver = create_webdriver(browser)
 
     scraper = Scraper(driver, courses)
     scraper.scrape_for_courses()
