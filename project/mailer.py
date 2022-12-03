@@ -61,7 +61,7 @@ class Mailer:
         try:
             with smtplib.SMTP_SSL(smtp_host, port, context=context) as server:
                 server.login(self.sender_email, self.__email_pass)
-                if open_courses:
+                if open_courses.courses:
                     subject = "Open courses available!"
                     body = f"The following courses are available for sign up:\n{open_courses}\n\n\n--RegistrateTUD"
                 msg: str = f"Subject: {subject}\n\n{body}"
