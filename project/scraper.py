@@ -7,6 +7,7 @@ from project.constants import SIGN_UP_URL, NO_COURSES_FOUND, UNABLE_TO_SIGNUP, S
 from project.utils import read_from_json, decode_string
 from project.courses import Courses
 from project.mailer import Mailer
+from project.telegram_bot import TelegramBot
 import time
 import logging
 
@@ -110,27 +111,28 @@ class Scraper:
         logging.info("Completed scrape!")
         d.close()
 
-    def notify(self, method="m"):
+    def notify(self, method: str):
         """
         Attempts to send a notification to the user with the courses for which exams are open for sign up. So
         far, only notifying by mail has been implemented. Multiple methods will be possible by appending the
         method letter to the string in ./data/prefs.py.
             'm': Creates a Mailer object to send an email with to a user specified one.
             't': Not implemented.
-        TODO: Integrate the Telegram API to work as a notification method.
 
         Args:
-            method (str, optional): User specified method of notification. Defaults to "mail" since this is the
-                only method implemented so far.
+            method (str): User specified method of notification. Should be set in ./data/prefs.py.
         """
         if "m" in method:
-            logging.info("Sending email!")
             creds: dict[str] = read_from_json()
+            logging.info(f"Sending email ({creds.get('sender_mail')} -> {creds.get('receiver_mail')})...")
             notifier = Mailer(creds["receiver_mail"], creds["sender_mail"], decode_string(creds["mail_pass"]))
             notifier.send_mail(self.__available_courses)
         
         if "t" in method:
-            logging.info("Not Implemented yet!")
+            creds: dict[str] = read_from_json()
+            logging.info(f"Sending Telegram to {creds.get('telegram_id')}...")
+            notifier = TelegramBot(creds.get("telegram_token", None), creds.get("telegram_id", None))
+            notifier.send_notification(self.__available_courses)
 
     def _wait_for_element_by(self, by: By, name: str, timeout=30) -> None:
         """
