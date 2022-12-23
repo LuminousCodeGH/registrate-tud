@@ -11,6 +11,14 @@ dp: Dispatcher = updater.dispatcher
 
 
 def tgc_start(update: Update, context: CallbackContext):
+    """
+    This method registers the telegram text using the Dispatcher CommandHandler from
+    the python_telegram_bot library. The user ID gets saved to the ./data/creds.json file.
+
+    Args:
+        update (Update): Provided by the Telegram API. This contains data regarding the message sent.
+        context (CallbackContext): Provided by the Telegram API. This is obsolete.
+    """
     creds["telegram_id"] = str(update.message.chat_id)
     logging.info(f"Received start command from '{creds['telegram_id']}'")
     save_to_json(creds)
