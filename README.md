@@ -73,7 +73,7 @@ to check manually which exams are available. Whether or not it is worth the effo
     * Manually adjust the credentials in ./project/data/creds.json (NOTE: Passwords are base64 encoded)
 * In case of a exception while sending the email, most likely the credentials are incorrect again. See bullet above
     * NOTE: Only sending from a Google mail has been tested, change `smtp_host` and `port` at your own risk
-* In case of an error parsing Markdown in the `TelegramBot`, this is likely because one of the open courses contains characters that have functionality in Markdown. Remove them or select a different notification method.
+* In case of a `TelegramOtherException: Bad Request` while parsing the notification in the `TelegramBot`, it is likely one of the open courses contains characters that have functionality in Markdown. Remove them or select a different notification method.
     * A better fix might be implemented later.
 
 ## Future Implementations
