@@ -7,7 +7,19 @@ import logging
 
 
 class TelegramBot:
+    """
+    This class handles the notification sending after scraping has been completed.
+    """
     def __init__(self, token, chat_id) -> None:
+        """
+        The initialiser method for the TelegramBot class.
+
+        Args:
+            token (_type_): This is the token provided by the user corresponding to a specific telegram bot. This can
+                be sensitive.
+            chat_id (_type_): The chat ID set during the initialisation for the telegram notification method. This
+                is the chat the notification gets sent to.
+        """
         self.token: str = token
         self.chat_id: str = chat_id
         self.updater: Updater = Updater(token=self.token, use_context=True)
@@ -39,6 +51,17 @@ class TelegramBot:
         self._chat_id = value
 
     def send_notification(self, open_courses: Courses) -> None:
+        """
+        This method generates a notification based on the open_courses from the Scraper
+        and sends it in a Markdown format to the provided chat (according to the chat_id).
+        NOTE: Parentheses and other markdown symnols in the course name may result in the 
+        markdown not parsing correctly and failing to send. Therefor it is recommended that
+        you use both email and telegram.
+
+        Args:
+            open_courses (Courses): The open courses according to the results of the scrape. Provided
+                in the Scraper class.
+        """
         parse_mode: ParseMode = ParseMode.MARKDOWN_V2
         if open_courses.courses:
             body: str = f"The following courses are available for sign up:\n\n{open_courses}\n\n"+\

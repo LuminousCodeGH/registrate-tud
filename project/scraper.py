@@ -113,11 +113,11 @@ class Scraper:
 
     def notify(self, method: str):
         """
-        Attempts to send a notification to the user with the courses for which exams are open for sign up. So
-        far, only notifying by mail has been implemented. Multiple methods will be possible by appending the
-        method letter to the string in ./data/prefs.py.
+        Attempts to send a notification to the user with the courses for which exams are open for sign up. 
+        Multiple methods are possible by appending the method letter to the string in ./data/prefs.py.
             'm': Creates a Mailer object to send an email with to a user specified one.
-            't': Not implemented.
+            't': Creates a TelegramBot object to send a text to a chat, specified in the telegram init, using
+                the token provided by the user.
 
         Args:
             method (str): User specified method of notification. Should be set in ./data/prefs.py.

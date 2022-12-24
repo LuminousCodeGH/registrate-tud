@@ -41,6 +41,15 @@ to check manually which exams are available. Whether or not it is worth the effo
     * On Windows: type `python.exe -m project.__main__.py -i` in the terminal or run init.cmd
     * On MacOS / Linux: type `python -m project.__main__.py -i` in the terminal (NOTE: MacOS / Linux not supported yet)
 
+#### Telegram Setup
+
+* Visit BotFather to create a new bot: https://telegram.me/BotFather
+* Start the conversation using `/start` if you haven't talked to BotFather before
+* Create a new bot using `/newbot` and by following the steps provided
+* Copy the token (starting with the number sequence, ending after the string past the colon)
+* Paste the token in ./project/data/prefs.py
+* Do not forget to set the notification preference in ./project/data/prefs.py too!
+
 ### Executing program
 
 #### Windows Standard
@@ -64,6 +73,8 @@ to check manually which exams are available. Whether or not it is worth the effo
     * Manually adjust the credentials in ./project/data/creds.json (NOTE: Passwords are base64 encoded)
 * In case of a exception while sending the email, most likely the credentials are incorrect again. See bullet above
     * NOTE: Only sending from a Google mail has been tested, change `smtp_host` and `port` at your own risk
+* In case of a `TelegramOtherException: Bad Request` while parsing the notification in the `TelegramBot`, it is likely one of the open courses contains characters that have functionality in Markdown. Remove them or select a different notification method.
+    * A better fix might be implemented later.
 
 ## Future Implementations
 
