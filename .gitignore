@@ -1,8 +1,8 @@
 # Custom specified
 .idea
 courses.csv
-project/chromedriver.exe
-project/geckodriver.exe
+project/chromedriver*
+project/geckodriver*
 project/geckodriver.log
 project/data/creds.json
 
