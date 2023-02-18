@@ -9,6 +9,6 @@ match system():              # Put browser executable files here for your system
     case "Linux":
         browser_path: str = "/snap/bin/firefox"
 
-browser_profile: str = "/home/jacob/snap/firefox/common/.cache/mozilla/firefox/pmfrj4cg.default"
+browser_profile: str = ""
 
 notification_method: str = "m"  # Put desired method(s) here ('m' for email, 't' for 'telegram')
