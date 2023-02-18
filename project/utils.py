@@ -1,5 +1,6 @@
 from selenium.webdriver import Chrome, ChromeOptions, Firefox, FirefoxOptions
-from project.data.prefs import browser_path
+from platform import system
+from project.data.prefs import browser_path, browser_profile
 import logging
 import base64
 import json
@@ -22,6 +23,16 @@ def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None
         Chrome | Firefox | None: The driver which will be used for scraping. In case there is an error, returns None.
     """
     logging.info(f"Creating {browser} webdriver...")
+    current_system: str = get_system()
+
+    match current_system:
+        case "Linux":
+            executable_path = "./project/[X]driver"
+        case "Windows":
+            executable_path = "./project/[X]driver.exe"
+        case _:
+            executable_path = "./project/[X]driver"
+
     if browser != "chrome" and browser != "firefox":
         if browser == "":
             logging.error(f"Browser type 'browser' seems to be unset. Set it in ./data/prefs.py")
@@ -32,12 +43,21 @@ def create_webdriver(browser: str, is_headless=False) -> Chrome | Firefox | None
         if browser == "chrome":
             driver_options = ChromeOptions()
             driver_options.headless = is_headless
-            driver = Chrome(executable_path="./project/chromedriver.exe", options=driver_options)
+            if browser_profile != "":
+                driver_options.add_argument(f"user-data-dir={browser_profile}")
+            executable_path = executable_path.replace("[X]", "chrome")
+            logging.info(f"Starting driver with exe path: {executable_path}")
+            driver = Chrome(executable_path=executable_path, options=driver_options)
         elif browser == "firefox":
             driver_options = FirefoxOptions()
             driver_options.headless = is_headless
             driver_options.binary_location = browser_path
-            driver = Firefox(executable_path="./project/geckodriver.exe", options=driver_options)
+            if browser_profile != "":
+                driver_options.add_argument("-profile")
+                driver_options.add_argument(browser_profile)
+            executable_path = executable_path.replace("[X]", "gecko")
+            logging.info(f"Starting driver with exe path: {executable_path}")
+            driver = Firefox(executable_path=executable_path, options=driver_options)
         return driver
     except Exception as e:
         # Catching WebDriverException is not allowed, which is what is called in this case. Hence 'Exception'...
@@ -108,3 +128,12 @@ def read_from_json(jpath="./project/data/creds.json") -> dict[str]:
     with open(jpath) as f:
         creds: dict[str] = json.load(f)
     return creds
+
+def get_system() -> str:
+    supported_systems: list[str] = ["Windows", "Linux"]
+    current_system: str = system()
+    
+    if current_system not in supported_systems:
+        logging.warning(f"Your OS ({current_system}) has not been tested and might not be supported!")
+    
+    return current_system
