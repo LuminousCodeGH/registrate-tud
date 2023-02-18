@@ -1,5 +1,5 @@
 from telegram.ext import Updater
-from telegram import ParseMode
+from telegram.constants import ParseMode
 from project.utils import read_from_json
 from project.courses import Courses
 from project.course import Course
