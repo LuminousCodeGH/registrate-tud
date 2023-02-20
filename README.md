@@ -24,7 +24,7 @@ to check manually which exams are available. Whether or not it is worth the effo
 
 * Windows 10 (It should work on Win7 and Win11 too)
 * Python 3.10+
-* Libraries: see requirements.txt
+* Libraries: see requirements.txt (NOTE: Use `pip install -r requirements.txt` to install)
 * Chrome or Firefox
 * A respective driver (NOTE: Driver version should not exceed the browser version)
     * Chrome:  https://chromedriver.storage.googleapis.com/index.html
@@ -39,7 +39,8 @@ to check manually which exams are available. Whether or not it is worth the effo
 * Configure the ./project/data/prefs.py
 * Run the initial setup
     * On Windows: type `python.exe -m project.__main__.py -i` in the terminal or run init.cmd
-    * On MacOS / Linux: type `python -m project.__main__.py -i` in the terminal (NOTE: MacOS / Linux not supported yet)
+    * On Linux: type `python3 -m project.__main__ -i` in the terminal
+    * MacOS is not officially supported, but it should be similar to Linux
 
 #### Telegram Setup
 
@@ -65,21 +66,26 @@ to check manually which exams are available. Whether or not it is worth the effo
     * Under trigger, it is recommended you add a random delay
     * Under actions, select 'Start a program' and point to schedule.cmd
 
+#### Linux Standard
+* Open the terminal in the Registrate folder and type `python3 -m project.__main__`
+    * In case you want to add courses after intial setup, use the `-a` or `--add_courses` argument
+
 ## Help
 
-* To get a list of arguments type `python.exe -m project.__main__.py -h` in the terminal
+* To get a list of arguments append to the standard run command `-h` in the terminal
 * In case of a `TimeoutException` while scraping, it is possible the credentials are incorrect. To fix this you can:
     * Rerun the init.cmd
     * Manually adjust the credentials in ./project/data/creds.json (NOTE: Passwords are base64 encoded)
 * In case of a exception while sending the email, most likely the credentials are incorrect again. See bullet above
     * NOTE: Only sending from a Google mail has been tested, change `smtp_host` and `port` at your own risk
-* In case of a `TelegramOtherException: Bad Request` while parsing the notification in the `TelegramBot`, it is likely one of the open courses contains characters that have functionality in Markdown. Remove them or select a different notification method.
-    * A better fix might be implemented later.
+* In case of a `TelegramOtherException: Bad Request` while parsing the notification in the `TelegramBot`, it is likely one of the open courses contains characters that have functionality in Markdown. Remove them or select a different notification method
+    * A better fix might be implemented later
+* On Linux it is possible that the driver will fail to load a browser profile, in this case you will have to point to it manually in ./data/prefs.py
+    * The location of the browser profile can be easily found by typing in `about:profiles` in Firefox (possibly the same for Chrome)
 
 ## Future Implementations
 
-* Integrate Telegram API for notifications as an alternative to sending an email
-* Add support for Linux and MacOS and instructions on how to set the script up on the respective platform
+* Add support for MacOS and instructions on how to set the script up on the respective platform
 * Implement marking courses as complete after the last exam has been passed
 
 ## Authors
