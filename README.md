@@ -38,7 +38,7 @@ to check manually which exams are available. Whether or not it is worth the effo
 * Install the respective webdriver and place it in ./project
 * Configure the ./project/data/prefs.py
 * Run the initial setup
-    * On Windows: type `python.exe -m project.__main__.py -i` in the terminal or run init.cmd
+    * On Windows: type `python.exe -m project.__main__ -i` in the terminal or run init.cmd
     * On Linux: type `python3 -m project.__main__ -i` in the terminal
     * MacOS is not officially supported, but it should be similar to Linux
 
