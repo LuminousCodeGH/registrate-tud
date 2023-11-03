@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from project.constants import SIGN_UP_URL, NO_COURSES_FOUND, UNABLE_TO_SIGNUP, SIGNUP_AVAILABLE, NOT_IN_PROGRAM
+from project.constants import SIGN_UP_URL, NO_COURSES_FOUND, CLOSED_SIGNUP, UNABLE_TO_SIGNUP, SIGNUP_AVAILABLE, NOT_IN_PROGRAM
 from project.utils import read_from_json, decode_string
 from project.courses import Courses
 from project.mailer import Mailer
@@ -89,6 +89,10 @@ class Scraper:
             self._wait_until_in_page(NO_COURSES_FOUND, course.code, timeout=10)
             if self._search_in_page(NO_COURSES_FOUND):
                 logging.info(f"'{course}' was not found, there is no sign up")
+                d.refresh()
+                continue
+            elif self._search_in_page(CLOSED_SIGNUP):
+                logging.info(f"The signup for '{course}' is closed")
                 d.refresh()
                 continue
             d.find_element(By.CSS_SELECTOR, ".osi-ion-item").click()
