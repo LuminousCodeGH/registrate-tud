@@ -5,6 +5,7 @@ project/chromedriver*
 project/geckodriver*
 project/geckodriver.log
 project/data/creds.json
+project/data/prefs.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -48,8 +48,8 @@ to check manually which exams are available. Whether or not it is worth the effo
 * Start the conversation using `/start` if you haven't talked to BotFather before
 * Create a new bot using `/newbot` and by following the steps provided
 * Copy the token (starting with the number sequence, ending after the string past the colon)
-* Paste the token in ./project/data/prefs.py
-* Do not forget to set the notification preference in ./project/data/prefs.py too!
+* Do not forget to set the notification preference in ./project/data/prefs.py!
+* Run the script, it should prompt you for the token if it has not been found
 
 ### Executing program
 
